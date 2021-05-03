@@ -1,5 +1,6 @@
 import asyncio
 import discord
+import json
 import psutil
 import os
 import subprocess
@@ -19,6 +20,7 @@ SERVER_BAT = r'D:\Dedicated\ValheimServer\InstallDirectory\Startup.bat'
 BACKUP_BAT = r'D:\Dedicated\ValheimServer\InstallDirectory\Backup.bat'
 UPDATE_BAT = r'D:\Dedicated\ValheimServer\InstallDirectory\Update.bat'
 
+PLAYER_FILE_LOC = r'D:\Dedicated\ValheimServer\InstallDirectory\players.json'
 DISCORD_BOT_TOKEN = r'DISCORD_BOT_TOKEN'
 
 class ValheimClient(discord.Client):
@@ -59,10 +61,8 @@ class ValheimClient(discord.Client):
             await self.update_server(msg)
             return
 
-        # Placeholder until I can find a solution for this. The logs are pretty vague, but 
-        # I'm pretty sure I can find login based on steam id.
         if msg.content == '!valheim players':
-            await msg.channel.send("Sorry, the `!valheim players` command hasn't been implemented yet.")
+            await self.check_players(msg)
             return
 
         if msg.content == '!help':
@@ -72,8 +72,8 @@ class ValheimClient(discord.Client):
             + '\ntype `!valheim status` to get server status'
             + '\ntype `!valheim ip` to get the server ip address'
             + '\ntype `!valheim backup` to backup the server world'
-            + '\ntype `!valheim update` to update the server')
-#            + '\ntype `!valheim players` to get online status for all players')
+            + '\ntype `!valheim update` to update the server'
+            + '\ntype `!valheim players` to get online status for all players')
             return
 
     async def server_control(self, direction, msg):
@@ -186,6 +186,32 @@ class ValheimClient(discord.Client):
             else:
                 await msg.channel.send("Server error - could not be restarted !")
             
+        return
+
+    async def check_players(self, msg):
+        if not os.path.exists(PLAYER_FILE_LOC):
+            await msg.channel.send("Could not find the Players file to check online.")
+            return
+
+        player_list = {}        
+        with open(PLAYER_FILE_LOC) as json_file:
+            player_list = json.load(json_file)
+     
+        at_least_one = False
+        return_msg = r'Player(s) Currently Online: '
+        for key, value in player_list.items():
+            if value == 'Yes':
+                at_least_one = True
+                return_msg += '\n'
+                return_msg += key
+        
+        if at_least_one:
+            await msg.channel.send(return_msg)
+        else:
+            return_msg += '\n'
+            return_msg += 'None'
+            await msg.channel.send(return_msg)           
+
         return
 
     # The server could be started/stopped/updated outside of the bot, so
