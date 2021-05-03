@@ -1,4 +1,4 @@
-# ValheimDiscordBot
+# Valheim Discord Bot
 Discord bot that can manage and get information on a Dedicated Windows Valheim Server
 
 Seen a few bots written for Linux and using Node.js. Haven't seen too many using Python on Windows, so I thought I'd create one to manange my own server. I play on a dedicated Windows server with some friends ( that I trust ) so allowing them to upgrade or start/stop the server is not worrying to me. Being allowed to upgrade the server if I'm not available is a pretty much a neccesity for us.
