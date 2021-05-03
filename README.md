@@ -5,6 +5,8 @@ Seen a few bots written for Linux and using Node.js. Haven't seen too many using
 
 The script uses a series of Windows Batch files to perform their actions. As the Windows machine this is run on is local, I sometimes want to run these batch files manually. Another reason why instead of running these commands via a subprocess in the Python script, I create separate processes as I don't want them linked to the fact the Bot is running or not. This complicates the script, but was a requirement for me for flexibility.
 
+**NOTE: ** For the 'players' command to function properly, the [Valheim Player Watch](https://github.com/insomnolence/ValheimPlayerWatch) Python script should be run along with this one on the dedicated Valheim Server. Please check out the README there for more information. This script will still work without it, just lacking the 'players' command.
+
 ## Third Party Libraries
 
 The following third party libraries were needed to be installed to get this script to work. They should be easily installed by using the pip install command.
